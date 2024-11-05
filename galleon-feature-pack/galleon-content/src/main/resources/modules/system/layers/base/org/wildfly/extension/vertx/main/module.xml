@@ -25,6 +25,7 @@
         <module name="org.wildfly.subsystem"/>
         <module name="org.jboss.as.weld.common"/>
         <module name="org.jboss.jandex"/>
+        <module name="org.jboss.vfs"/>
         <module name="io.vertx.core" />
         <module name="io.smallrye.common.annotation" />
         <module name="io.smallrye.reactive.mutiny.vertx-core" />
