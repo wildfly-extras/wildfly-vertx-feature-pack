@@ -3,7 +3,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<build xmlns="urn:wildfly:feature-pack-build:3.1" producer="org.wildfly.extension.vertx:wildfly-vertx-feature-pack">
+<build xmlns="urn:wildfly:feature-pack-build:3.3" producer="${project.groupId}:${project.artifactId}:${project.version}">
     <dependencies>
         <dependency group-id="org.wildfly" artifact-id="wildfly-ee-galleon-pack">
             <name>org.wildfly:wildfly-ee-galleon-pack</name>
@@ -29,7 +29,7 @@
         <package name="docs" />
     </default-packages>
     <package-schemas>
-        <group name="org.wildfly"/>
+        <group name="org.wildfly.extras.vertx"/>
     </package-schemas>
 
     <plugins>
@@ -41,6 +41,9 @@
             <standalone>
                 <extension>org.wildfly.extension.vertx</extension>
             </standalone>
+            <domain>
+                <extension>org.wildfly.extension.vertx</extension>
+            </domain>
         </extensions>
     </generate-feature-specs>
 
