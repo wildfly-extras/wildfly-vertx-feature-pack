@@ -9,11 +9,11 @@
     <parent>
         <groupId>org.wildfly.extras.vertx</groupId>
         <artifactId>wildfly-vertx-feature-pack-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0.Final-SNAPSHOT</version>
     </parent>
 
     <artifactId>wildfly-vertx-feature-pack</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0.Final-SNAPSHOT</version>
 
     <name>WildFly Vertx Extension - Distributions :: Galleon Feature Pack</name>
     <description>The feature pack of the Vertx extension.</description>
