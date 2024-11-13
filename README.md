@@ -1,4 +1,4 @@
-# wildfly-vertx-extension
+# wildfly-vertx-feature-pack
 
 [![CI Tests](https://github.com/gaol/wildfly-vertx-extension/actions/workflows/ci.yml/badge.svg)](https://github.com/gaol/wildfly-vertx-extension/actions/workflows/ci.yml)
 
@@ -18,4 +18,9 @@ This project provides the following modules:
 * **testsuite/shared/** -- Some shared test utils can be used in the test cases.
 * **testsuite/integration/basic/** -- Some testcases to test manipulate Eclipse VertxOptions against a WildFly installation that includes the subsystem.
 
+## Documentation
 
+The documentations of this feature pack are on the github wiki page:
+
+* [Installation Guide](https://github.com/wildfly-extras/wildfly-vertx-feature-pack/wiki/Installation-Guide)
+* [Configuration Guide](https://github.com/wildfly-extras/wildfly-vertx-feature-pack/wiki/Configuration-Guide)
