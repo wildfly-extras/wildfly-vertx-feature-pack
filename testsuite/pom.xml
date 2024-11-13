@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.wildfly.extras.vertx</groupId>
         <artifactId>wildfly-vertx-extension-pom</artifactId>
-        <version>1.0.0.Final</version>
+        <version>1.0.1.Final-SNAPSHOT</version>
     </parent>
 
     <artifactId>wildfly-vertx-extension-testsuite</artifactId>
