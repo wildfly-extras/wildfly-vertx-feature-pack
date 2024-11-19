@@ -14,8 +14,11 @@ import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.addr
 import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.executeOperation;
 import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.isReloadRequired;
 import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.readVertxOptionOperation;
+import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.readVertxOptions;
+import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.serverTempDir;
 import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.vertxOptionOperation;
 
+import io.vertx.core.VertxOptions;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.as.test.integration.management.util.ServerReload;
@@ -24,6 +27,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.wildfly.extension.vertx.test.shared.AbstractMgtTestBase;
+
+import java.nio.file.Path;
 
 /**
  * You can define many vertx options without having it referenced by the vertx instance, at that time, any changes to
@@ -48,6 +53,10 @@ public class VertxOptionNoReloadRequiredTestCase extends AbstractMgtTestBase {
     ModelNode result = response.get(RESULT);
     Assert.assertNotNull(result);
     Assert.assertFalse(isReloadRequired(managementClient));
+
+    // check the default file cache dir
+    VertxOptions vertxOptions = readVertxOptions(managementClient, vertxOptionName);
+    Assert.assertEquals(vertxOptions.getFileSystemOptions().getFileCacheDir(), Path.of(serverTempDir(managementClient), "vertx-cache").toString());
 
     // remove it won't lead to reload required
     executeOperation(managementClient, vertxOptionOperation(vertxOptionName, "remove"));
