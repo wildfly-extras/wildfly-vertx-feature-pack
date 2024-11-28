@@ -52,6 +52,9 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         operation.get(ATTR_MAX_EVENTLOOP_EXECUTE_TIME).set(60);
         operation.get(ATTR_MAX_WORKER_EXECUTE_TIME).set(70);
         operation.get(ATTR_WARNING_EXECUTION_TIME).set(80);
+        operation.get(ATTR_FS_CLASS_PATH_RESOLVING_ENABLED).set(true);
+        operation.get(ATTR_FS_FILE_CACHE_ENABLED).set(true);
+        operation.get(ATTR_FS_FILE_CACHE_DIR).set("/tmp/.vertx-cache");
         executeOperation(managementClient, operation);
 
         ModelNode response = executeOperation(managementClient, readVertxOptionOperation(vertxOptionName));
@@ -65,6 +68,9 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         Assert.assertEquals(60L, result.get(ATTR_MAX_EVENTLOOP_EXECUTE_TIME).asLong());
         Assert.assertEquals(70L, result.get(ATTR_MAX_WORKER_EXECUTE_TIME).asLong());
         Assert.assertEquals(80L, result.get(ATTR_WARNING_EXECUTION_TIME).asLong());
+        Assert.assertTrue(result.get(ATTR_FS_CLASS_PATH_RESOLVING_ENABLED).asBoolean());
+        Assert.assertTrue(result.get(ATTR_FS_FILE_CACHE_ENABLED).asBoolean());
+        Assert.assertEquals("/tmp/.vertx-cache", result.get(ATTR_FS_FILE_CACHE_DIR).asString());
 
         VertxOptions vertxOptions = readVertxOptions(managementClient, vertxOptionName);
         Assert.assertEquals(10, vertxOptions.getEventLoopPoolSize());
@@ -76,6 +82,10 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         Assert.assertEquals(60L, vertxOptions.getMaxEventLoopExecuteTime());
         Assert.assertEquals(70L, vertxOptions.getMaxWorkerExecuteTime());
         Assert.assertEquals(80L, vertxOptions.getWarningExceptionTime());
+        Assert.assertNotNull(vertxOptions.getFileSystemOptions());
+        Assert.assertTrue(vertxOptions.getFileSystemOptions().isFileCachingEnabled());
+        Assert.assertTrue(vertxOptions.getFileSystemOptions().isClassPathResolvingEnabled());
+        Assert.assertEquals("/tmp/.vertx-cache", vertxOptions.getFileSystemOptions().getFileCacheDir());
 
         // clear resources
         executeOperation(managementClient, vertxOptionOperation(vertxOptionName, "remove"));
@@ -87,6 +97,7 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         final String addressResolverName = "aro";
         ModelNode operation = addressResolverOperation(addressResolverName, "add");
         operation.get(ATTR_HOSTS_PATH).set("local-path");
+        operation.get(ATTR_HOSTS_VALUE).set("127.0.0.1 localhost");
         operation.get(ATTR_SERVERS).add("localhost").add("127.0.0.1");
         operation.get(ATTR_OPT_RES_ENABLED).set(true);
         operation.get(ATTR_CACHE_MIN_TTL).set(1024);
@@ -99,6 +110,7 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         operation.get(ATTR_N_DOTS).set(8);
         operation.get(ATTR_ROTATE_SERVERS).set(true);
         operation.get(ATTR_ROUND_ROBIN_INET_ADDRESS).set(true);
+        operation.get(ATTR_HOSTS_REFRESH_PERIOD).set(100);
         executeOperation(managementClient, operation);
 
         ModelNode response = executeOperation(managementClient, addressResolverOperation(addressResolverName, "read-resource"));
@@ -123,6 +135,8 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         Assert.assertEquals(8, result.get(ATTR_N_DOTS).asInt());
         Assert.assertTrue(result.get(ATTR_ROTATE_SERVERS).asBoolean());
         Assert.assertTrue(result.get(ATTR_ROUND_ROBIN_INET_ADDRESS).asBoolean());
+        Assert.assertEquals(100, result.get(ATTR_HOSTS_REFRESH_PERIOD).asInt());
+        Assert.assertEquals("127.0.0.1 localhost", result.get(ATTR_HOSTS_VALUE).asString());
 
         final String optionName = "vo";
         ModelNode addVertxOption = vertxOptionOperation(optionName, "add");
@@ -146,6 +160,8 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         Assert.assertEquals(8, addressResolverOptions.getNdots());
         Assert.assertTrue(addressResolverOptions.isRotateServers());
         Assert.assertTrue(addressResolverOptions.isRoundRobinInetAddress());
+        Assert.assertEquals(100, addressResolverOptions.getHostsRefreshPeriod());
+        Assert.assertEquals("127.0.0.1 localhost", addressResolverOptions.getHostsValue().toString());
 
         // clear resources
         executeOperation(managementClient, vertxOptionOperation(optionName, "remove"));

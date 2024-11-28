@@ -114,6 +114,17 @@ public final class ManagementClientUtils {
         return result.get("config-dir").asString();
     }
 
+    public static String serverTempDir(ManagementClient managementClient) throws IOException {
+        ModelNode address = new ModelNode();
+        address.add(CORE_SERVICE, "server-environment");
+        final ModelNode operation = new ModelNode();
+        operation.get(OP).set(READ_RESOURCE_OPERATION);
+        operation.get(OP_ADDR).set(address);
+        operation.get(INCLUDE_RUNTIME).set(true);
+        ModelNode result = executeOperation(managementClient, operation).get(RESULT);
+        return result.get("temp-dir").asString();
+    }
+
     public static boolean isReloadRequired(final ManagementClient managementClient) throws IOException {
         ModelNode operation = new ModelNode();
         operation.get(OP).set("read-attribute");
