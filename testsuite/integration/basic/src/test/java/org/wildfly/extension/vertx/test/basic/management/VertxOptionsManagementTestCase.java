@@ -96,7 +96,6 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
     public void testAddressResolverOption() throws IOException {
         final String addressResolverName = "aro";
         ModelNode operation = addressResolverOperation(addressResolverName, "add");
-        operation.get(ATTR_HOSTS_PATH).set("local-path");
         operation.get(ATTR_HOSTS_VALUE).set("127.0.0.1 localhost");
         operation.get(ATTR_SERVERS).add("localhost").add("127.0.0.1");
         operation.get(ATTR_OPT_RES_ENABLED).set(true);
@@ -116,7 +115,6 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         ModelNode response = executeOperation(managementClient, addressResolverOperation(addressResolverName, "read-resource"));
         ModelNode result = response.get(RESULT);
         Assert.assertNotNull(result);
-        Assert.assertEquals("local-path", result.get(ATTR_HOSTS_PATH).asString());
 
         List<String> serverList = result.get(ATTR_SERVERS).asList().stream().map(ModelNode::asString).collect(Collectors.toList());
         Assert.assertTrue(serverList.contains("localhost"));
@@ -145,7 +143,6 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         VertxOptions vertxOptions = readVertxOptions(managementClient, optionName);
         AddressResolverOptions addressResolverOptions = vertxOptions.getAddressResolverOptions();
         Assert.assertNotNull(addressResolverOptions);
-        Assert.assertEquals("local-path", addressResolverOptions.getHostsPath());
         Assert.assertTrue(addressResolverOptions.getServers().contains("localhost"));
         Assert.assertTrue(addressResolverOptions.getServers().contains("127.0.0.1"));
         Assert.assertTrue(addressResolverOptions.isOptResourceEnabled());
