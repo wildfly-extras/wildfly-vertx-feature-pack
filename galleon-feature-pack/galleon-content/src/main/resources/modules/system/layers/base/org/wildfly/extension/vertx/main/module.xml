@@ -28,6 +28,7 @@
         <module name="org.jboss.jandex"/>
         <module name="org.jboss.vfs"/>
         <module name="io.vertx.core" />
+        <module name="io.netty.netty-common" />
         <module name="io.smallrye.common.annotation" />
         <module name="io.smallrye.reactive.mutiny.vertx-core" />
     </dependencies>
