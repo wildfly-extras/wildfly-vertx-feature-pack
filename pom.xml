@@ -60,9 +60,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:https://github.com/gaol/wildfly-vertx-extension.git</connection>
-        <developerConnection>scm:git:https://github.com/gaol/wildfly-vertx-extension.git</developerConnection>
-        <url>https://github.com/gaol/wildfly-vertx-extension/</url>
+        <connection>scm:git:https://github.com/wildfly-extras/wildfly-vertx-feature-pack.git</connection>
+        <developerConnection>scm:git:https://github.com/wildfly-extras/wildfly-vertx-feature-pack.git</developerConnection>
+        <url>https://github.com/wildfly-extras/wildfly-vertx-feature-pack</url>
       <tag>HEAD</tag>
   </scm>
 
