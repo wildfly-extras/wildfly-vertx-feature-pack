@@ -16,7 +16,7 @@
     <version>1.0.3.Final-SNAPSHOT</version>
 
     <name>WildFly Vertx Extension - Distributions :: Server Distribution</name>
-    <description>This is the server distribution with the extension</description>
+    <description>This is the server distribution with this extension, the integration tests in this project depends on this server.</description>
 
     <packaging>pom</packaging>
 
@@ -39,11 +39,36 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${server.name}</finalName>
         <plugins>
             <plugin>
-                <groupId>org.jboss.galleon</groupId>
-                <artifactId>galleon-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-channel-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>wildfly-vertx-feature-pack-manifest.yaml</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>server-provisioning</id>
@@ -52,79 +77,66 @@
                         </goals>
                         <phase>compile</phase>
                         <configuration>
-                            <install-dir>${project.build.directory}/${project.artifactId}-${project.version}</install-dir>
-                            <record-state>false</record-state>
-
-                            <log-time>${galleon.log.time}</log-time>
-                            <offline>${galleon.offline}</offline>
-                            <plugin-options>
+                            <provisioning-dir>${project.build.directory}/${project.artifactId}-${project.version}</provisioning-dir>
+                            <record-provisioning-state>true</record-provisioning-state>
+                            <offline-provisioning>true</offline-provisioning>
+                            <galleon-options>
                                 <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
                                 <optional-packages>passive+</optional-packages>
                                 <config-stability-level>preview</config-stability-level>
                                 <package-stability-level>preview</package-stability-level>
                                 <ignore-not-excluded-layers>true</ignore-not-excluded-layers>
-                            </plugin-options>
+                            </galleon-options>
                             <feature-packs>
                                 <feature-pack>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>wildfly-vertx-feature-pack</artifactId>
+                                    <version>${project.version}</version>
+                                    <inherit-configs>false</inherit-configs>
                                 </feature-pack>
                                 <feature-pack>
                                     <transitive>true</transitive>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-ee-galleon-pack</artifactId>
                                     <version>${version.org.wildfly}</version>
-                                    <included-packages>
-                                        <name>docs.examples.configs</name>
-                                        <name>modules.all</name>
-                                    </included-packages>
-                                    <included-configs>
-                                        <config>
-                                            <model>standalone</model>
-                                            <name>standalone.xml</name>
-                                        </config>
-                                    </included-configs>
+                                    <inherit-configs>true</inherit-configs>
                                 </feature-pack>
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-galleon-pack</artifactId>
                                     <version>${version.org.wildfly}</version>
-                                    <included-packages>
-                                        <name>docs.examples.configs</name>
-                                        <name>modules.all</name>
-                                    </included-packages>
-                                    <included-configs>
-                                        <config>
-                                            <model>standalone</model>
-                                            <name>standalone-microprofile.xml</name>
-                                        </config>
-                                    </included-configs>
+                                    <inherit-configs>true</inherit-configs>
                                 </feature-pack>
                             </feature-packs>
-                            <configurations>
-                                <config>
-                                    <model>standalone</model>
-                                    <name>standalone.xml</name>
-                                    <layers>
-                                        <layer>jaxrs-server</layer>
-                                        <layer>vertx</layer>
-                                    </layers>
-                                </config>
-                                <config>
-                                    <model>standalone</model>
-                                    <name>standalone-microprofile.xml</name>
-                                    <layers>
-                                        <layer>jaxrs-server</layer>
-                                        <layer>microprofile-platform</layer>
-                                        <layer>vertx</layer>
-                                    </layers>
-                                </config>
-                            </configurations>
+                            <channels>
+                                <channel>
+                                    <manifest>
+                                        <url>file:///${project.build.directory}/wildfly-vertx-feature-pack-manifest.yaml</url>
+                                    </manifest>
+                                </channel>
+                            </channels>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>vertx-subsystem-init</id>
+                        <goals>
+                            <goal>execute-commands</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <offline>true</offline>
+                            <jboss-home>${project.build.directory}/${project.artifactId}-${project.version}</jboss-home>
+                            <commands>
+                                <command>embed-server --stability=preview</command>
+                                <command>/extension=org.wildfly.extension.vertx:add</command>
+                                <command>/subsystem=vertx:add</command>
+                                <command>/subsystem=vertx/vertx=vertx:add</command>
+                                <command>stop-embedded-server</command>
+                            </commands>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>

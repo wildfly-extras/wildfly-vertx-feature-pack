@@ -1,0 +1,15 @@
+schemaVersion: "1.0.0"
+name: "${project.artifactId}"
+id: "${project.groupId}:${project.artifactId}"
+description: "The WildFly vertx channel to upgrade components and dependencies"
+streams:
+  # wildfly-vertx-feature-pack dependencies
+  - groupId: "${project.groupId}"
+    artifactId: "wildfly-vertx-extension"
+    version: "${project.version}"
+  - groupId: "io.vertx"
+    artifactId: "vertx-core"
+    version: "${version.io.vertx.vertx}"
+  - groupId: "io.smallrye.reactive"
+    artifactId: "smallrye-mutiny-vertx-core"
+    version: "${version.io.smallrye.smallrye-mutiny-vertx}"

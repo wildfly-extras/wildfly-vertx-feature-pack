@@ -21,7 +21,7 @@
         <jbossas.ts.integ.dir>${basedir}/..</jbossas.ts.integ.dir>
         <jbossas.ts.dir>${jbossas.ts.integ.dir}/..</jbossas.ts.dir>
         <jbossas.project.dir>${jbossas.ts.dir}/..</jbossas.project.dir>
-        <jboss.dist>${project.basedir}/target/wildfly</jboss.dist>
+        <jboss.dist>${project.build.directory}/wildfly</jboss.dist>
         <jboss.home>${jboss.dist}</jboss.home>
     </properties>
 
@@ -41,89 +41,36 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.jboss.galleon</groupId>
-                <artifactId>galleon-maven-plugin</artifactId>
-                <executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions combine.children="append">
                     <execution>
-                        <id>server-provisioning</id>
-                        <goals>
-                            <goal>provision</goal>
-                        </goals>
-                        <phase>compile</phase>
+                        <id>ts.copy-wildfly</id>
+                        <inherited>true</inherited>
+                        <phase>generate-test-resources</phase>
+                        <goals><goal>copy-resources</goal></goals>
                         <configuration>
-                            <install-dir>${project.build.directory}/wildfly</install-dir>
-                            <record-state>false</record-state>
-                            <log-time>${galleon.log.time}</log-time>
-                            <offline>true</offline>
-                            <plugin-options>
-                                <jboss-maven-dist />
-                                <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
-                                <optional-packages>passive+</optional-packages>
-                                <ignore-not-excluded-layers>true</ignore-not-excluded-layers>
-                            </plugin-options>
-                            <feature-packs>
-                                <feature-pack>
-                                    <transitive>true</transitive>
-                                    <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-ee-galleon-pack</artifactId>
-                                    <version>${version.org.wildfly}</version>
-                                    <included-packages>
-                                        <name>docs.examples.configs</name>
-                                        <name>modules.all</name>
-                                    </included-packages>
-                                </feature-pack>
-                                <feature-pack>
-                                    <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-galleon-pack</artifactId>
-                                    <version>${version.org.wildfly}</version>
-                                    <included-packages>
-                                        <name>docs.examples.configs</name>
-                                        <name>modules.all</name>
-                                    </included-packages>
-                                </feature-pack>
-                                <feature-pack>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>wildfly-vertx-feature-pack</artifactId>
-                                    <version>${project.version}</version>
-                                </feature-pack>
-                            </feature-packs>
-                            <configurations>
-                                <config>
-                                    <model>standalone</model>
-                                    <name>standalone.xml</name>
-                                    <layers>
-                                        <layer>jaxrs-server</layer>
-                                        <layer>jmx-remoting</layer>
-                                        <layer>ejb-lite</layer>
-                                        <layer>vertx</layer>
-                                    </layers>
-                                </config>
-                            </configurations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <configuration>
-                    <overwrite-provisioned-server>true</overwrite-provisioned-server>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>vertx-subsystem-init</id>
-                        <goals>
-                            <goal>execute-commands</goal>
-                        </goals>
-                        <phase>compile</phase>
-                        <configuration>
-                            <offline>true</offline>
-                            <jboss-home>${project.build.directory}/wildfly</jboss-home>
-                            <commands>
-                                <command>embed-server --stability=preview</command>
-                                <command>/subsystem=vertx/vertx=vertx:add</command>
-                                <command>stop-embedded-server</command>
-                            </commands>
+                            <outputDirectory>${jboss.dist}</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/../../../build/target/wildfly-vertx-build-${project.version}</directory>
+                                    <excludes>
+                                        <exclude>bin/client/</exclude>
+                                        <exclude>bin/*.jar</exclude>
+                                        <exclude>bin/*.sh</exclude>
+                                        <exclude>bin/*.bat</exclude>
+                                        <exclude>bin/*.ps1</exclude>
+                                        <exclude>docs/licenses/</exclude>
+                                        <exclude>docs/schema/</exclude>
+                                        <exclude>docs/examples/configs/</exclude>
+                                        <exclude>welcome-content/*.png</exclude>
+                                        <exclude>standalone/data</exclude>
+                                        <exclude>standalone/log</exclude>
+                                        <exclude>standalone/tmp</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
