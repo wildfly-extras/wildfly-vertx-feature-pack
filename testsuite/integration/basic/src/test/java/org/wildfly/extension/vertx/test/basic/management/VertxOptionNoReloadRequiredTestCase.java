@@ -7,7 +7,7 @@ package org.wildfly.extension.vertx.test.basic.management;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.NAME;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.RESULT;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.VALUE;
-import static org.wildfly.extension.vertx.VertxConstants.ATTR_EVENTLOOP_POOL_SIZE;
+import static org.wildfly.extension.vertx.VertxConstants.ATTR_EVENT_LOOP_POOL_SIZE;
 import static org.wildfly.extension.vertx.VertxConstants.ATTR_MAX_QUERIES;
 import static org.wildfly.extension.vertx.VertxConstants.ELEMENT_VERTX_OPTION_ADDRESS_RESOLVER;
 import static org.wildfly.extension.vertx.test.shared.ManagementClientUtils.addressResolverOperation;
@@ -64,15 +64,15 @@ public class VertxOptionNoReloadRequiredTestCase extends AbstractMgtTestBase {
 
     // now add it back
     operation = vertxOptionOperation(vertxOptionName, "add");
-    operation.get(ATTR_EVENTLOOP_POOL_SIZE).set(10);
+    operation.get(ATTR_EVENT_LOOP_POOL_SIZE).set(10);
     executeOperation(managementClient, operation);
     response = executeOperation(managementClient, readVertxOptionOperation(vertxOptionName));
     result = response.get(RESULT);
     Assert.assertNotNull(result);
-    Assert.assertEquals(10, result.get(ATTR_EVENTLOOP_POOL_SIZE).asInt());
+    Assert.assertEquals(10, result.get(ATTR_EVENT_LOOP_POOL_SIZE).asInt());
 
     operation = vertxOptionOperation(vertxOptionName, "write-attribute");
-    operation.get(NAME).set(ATTR_EVENTLOOP_POOL_SIZE);
+    operation.get(NAME).set(ATTR_EVENT_LOOP_POOL_SIZE);
     operation.get(VALUE).set(20);
     executeOperation(managementClient, operation);
 
@@ -80,7 +80,7 @@ public class VertxOptionNoReloadRequiredTestCase extends AbstractMgtTestBase {
     Assert.assertFalse(isReloadRequired(managementClient));
     response = executeOperation(managementClient, readVertxOptionOperation(vertxOptionName));
     result = response.get(RESULT);
-    Assert.assertEquals(20, result.get(ATTR_EVENTLOOP_POOL_SIZE).asInt());
+    Assert.assertEquals(20, result.get(ATTR_EVENT_LOOP_POOL_SIZE).asInt());
 
     // refer it to vertx instance
     try {
@@ -88,7 +88,7 @@ public class VertxOptionNoReloadRequiredTestCase extends AbstractMgtTestBase {
 
       // now update the option again
       operation = vertxOptionOperation(vertxOptionName, "write-attribute");
-      operation.get(NAME).set(ATTR_EVENTLOOP_POOL_SIZE);
+      operation.get(NAME).set(ATTR_EVENT_LOOP_POOL_SIZE);
       operation.get(VALUE).set(30);
       executeOperation(managementClient, operation);
 
@@ -98,7 +98,7 @@ public class VertxOptionNoReloadRequiredTestCase extends AbstractMgtTestBase {
       reload();
       response = executeOperation(managementClient, readVertxOptionOperation(vertxOptionName));
       result = response.get(RESULT);
-      Assert.assertEquals(30, result.get(ATTR_EVENTLOOP_POOL_SIZE).asInt());
+      Assert.assertEquals(30, result.get(ATTR_EVENT_LOOP_POOL_SIZE).asInt());
     } finally {
       unSetVertxOption();
       executeOperation(managementClient, vertxOptionOperation(vertxOptionName, "remove"));

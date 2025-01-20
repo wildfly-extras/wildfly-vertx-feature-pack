@@ -40,7 +40,7 @@ public final class ManagementClientUtils {
      */
     public static ModelNode vertxAddress() {
         ModelNode address = new ModelNode();
-        address.add(SUBSYSTEM, VertxConstants.ELEMENT_VERTX).add(VertxConstants.VERTX_SERVICE, VertxConstants.ELEMENT_VERTX);
+        address.add(SUBSYSTEM, VertxConstants.ELEMENT_VERTX).add(VertxConstants.ELEMENT_VERTX, VertxConstants.ELEMENT_VERTX);
         address.protect();
         return address;
     }

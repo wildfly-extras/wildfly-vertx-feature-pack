@@ -44,12 +44,12 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
     public void testAddVertxOption() throws IOException {
         final String vertxOptionName = "vo";
         ModelNode operation = vertxOptionOperation(vertxOptionName, "add");
-        operation.get(ATTR_EVENTLOOP_POOL_SIZE).set(10);
+        operation.get(ATTR_EVENT_LOOP_POOL_SIZE).set(10);
         operation.get(ATTR_WORKER_POOL_SIZE).set(20);
         operation.get(ATTR_INTERNAL_BLOCKING_POOL_SIZE).set(50);
         operation.get(ATTR_PREFER_NATIVE_TRANSPORT).set(true);
         operation.get(ATTR_BLOCKED_THREAD_CHECK_INTERVAL).set(50);
-        operation.get(ATTR_MAX_EVENTLOOP_EXECUTE_TIME).set(60);
+        operation.get(ATTR_MAX_EVENT_LOOP_EXECUTE_TIME).set(60);
         operation.get(ATTR_MAX_WORKER_EXECUTE_TIME).set(70);
         operation.get(ATTR_WARNING_EXECUTION_TIME).set(80);
         operation.get(ATTR_FS_CLASS_PATH_RESOLVING_ENABLED).set(true);
@@ -60,12 +60,12 @@ public class VertxOptionsManagementTestCase implements VertxConstants {
         ModelNode response = executeOperation(managementClient, readVertxOptionOperation(vertxOptionName));
         ModelNode result = response.get(RESULT);
         Assert.assertNotNull(result);
-        Assert.assertEquals(10, result.get(ATTR_EVENTLOOP_POOL_SIZE).asInt());
+        Assert.assertEquals(10, result.get(ATTR_EVENT_LOOP_POOL_SIZE).asInt());
         Assert.assertEquals(20, result.get(ATTR_WORKER_POOL_SIZE).asInt());
         Assert.assertEquals(50, result.get(ATTR_INTERNAL_BLOCKING_POOL_SIZE).asInt());
         Assert.assertTrue(result.get(ATTR_PREFER_NATIVE_TRANSPORT).asBoolean());
         Assert.assertEquals(50L, result.get(ATTR_BLOCKED_THREAD_CHECK_INTERVAL).asLong());
-        Assert.assertEquals(60L, result.get(ATTR_MAX_EVENTLOOP_EXECUTE_TIME).asLong());
+        Assert.assertEquals(60L, result.get(ATTR_MAX_EVENT_LOOP_EXECUTE_TIME).asLong());
         Assert.assertEquals(70L, result.get(ATTR_MAX_WORKER_EXECUTE_TIME).asLong());
         Assert.assertEquals(80L, result.get(ATTR_WARNING_EXECUTION_TIME).asLong());
         Assert.assertTrue(result.get(ATTR_FS_CLASS_PATH_RESOLVING_ENABLED).asBoolean());
