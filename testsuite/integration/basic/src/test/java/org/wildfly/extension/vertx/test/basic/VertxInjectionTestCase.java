@@ -15,7 +15,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.wildfly.extension.vertx.test.shared.ejb.EchoService;
@@ -32,7 +31,6 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-@Ignore("io.netty.netty-transport needs to be added as dependency to module: io.smallrye.reactive.mutiny.vertx-core")
 public class VertxInjectionTestCase {
     @ArquillianResource
     private URL url;
