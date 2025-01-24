@@ -7,7 +7,7 @@
 
 <tasks xmlns="urn:wildfly:wildfly-feature-pack-tasks:3.1">
     <copy-path src="docs/licenses/licenses.xsl" relative-to="content" target="docs/licenses/wildfly-vertx-extension-licenses.xsl"/>
-    <transform stylesheet="docs/licenses/wildfly-mvc-krazo-licenses.xsl" src="docs/licenses/wildfly-vertx-extension-feature-pack-licenses.xml" output="docs/licenses/wildfly-vertx-extension-feature-pack-licenses.html" feature-pack-properties="true" phase="FINALIZING"/>
+    <transform stylesheet="docs/licenses/wildfly-vertx-extension-licenses.xsl" src="docs/licenses/wildfly-vertx-extension-feature-pack-licenses.xml" output="docs/licenses/wildfly-vertx-extension-feature-pack-licenses.html" feature-pack-properties="true" phase="FINALIZING"/>
     <delete path="docs/licenses/wildfly-vertx-extension-licenses.xsl"/>
     <line-endings phase="FINALIZING">
       <unix>
